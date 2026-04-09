@@ -9,14 +9,14 @@ import {
 
 describe('Game Logic', () => {
     describe('Click Costs', () => {
-        it('should return 10 for level 1', () => {
-            expect(calculateClickCost(1)).toBe(10);
+        it('should return 15 for level 1', () => {
+            expect(calculateClickCost(1)).toBe(15);
         });
-        it('should return 15 for level 2', () => {
-            expect(calculateClickCost(2)).toBe(15);
+        it('should return 27 for level 2', () => {
+            expect(calculateClickCost(2)).toBe(27);
         });
         it('should increase exponentially', () => {
-            expect(calculateClickCost(5)).toBe(Math.floor(10 * Math.pow(1.5, 4)));
+            expect(calculateClickCost(5)).toBe(Math.floor(15 * Math.pow(1.8, 4)));
         });
     });
 
@@ -24,18 +24,18 @@ describe('Game Logic', () => {
         it('should return 50 for 0 units', () => {
             expect(calculateAutoClickerCost(0)).toBe(50);
         });
-        it('should return 65 for 1 unit', () => {
-            expect(calculateAutoClickerCost(1)).toBe(65);
+        it('should return 62 for 1 unit', () => {
+            expect(calculateAutoClickerCost(1)).toBe(62);
         });
     });
 
     describe('Speed Costs', () => {
-        it('should return 100 for level 1', () => {
-            expect(calculateSpeedCost(1)).toBe(100);
+        it('should return 500 for level 1', () => {
+            expect(calculateSpeedCost(1)).toBe(500);
         });
         it('should double for each level', () => {
-            expect(calculateSpeedCost(2)).toBe(200);
-            expect(calculateSpeedCost(3)).toBe(400);
+            expect(calculateSpeedCost(2)).toBe(1250);
+            expect(calculateSpeedCost(3)).toBe(Math.floor(500 * Math.pow(2.5, 2)));
         });
     });
 
@@ -43,9 +43,9 @@ describe('Game Logic', () => {
         it('should return 0 if no auto-clickers', () => {
             expect(calculateCPS(0, 10)).toBe(0);
         });
-        it('should return auto-clickers * speed', () => {
-            expect(calculateCPS(10, 2)).toBe(20);
-            expect(calculateCPS(5, 5)).toBe(25);
+        it('should return auto-clickers * speed * 0.2', () => {
+            expect(calculateCPS(10, 2)).toBe(4);
+            expect(calculateCPS(5, 5)).toBe(5);
         });
     });
 
