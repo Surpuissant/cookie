@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="top-bar">
+        <div class="brand">
+            <h1>Cookie Clicker Supuissant</h1>
+        </div>
+        <div class="user-info">
+            <span>🍪 <strong><%= user %></strong></span>
+            <a href="/logout" class="btn-logout">Déconnexion</a>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <!-- Panel 1: Stats -->
+        <div class="stats-panel">
+            <h2 id="cookie-count">0</h2>
+            <p>cookies</p>
+            <div id="cps-display">par seconde : 0</div>
+        </div>
+
+        <!-- Panel 2: Cookie Central -->
+        <div class="cookie-panel">
+            <div class="vignette"></div>
+            <div class="cookie-wrapper">
+                <div class="shine-halo"></div>
+                <div id="cursor-container" class="cursor-container"></div>
+                <img src="/images/cookie.png" id="main-cookie" alt="Cookie">
+            </div>
+        </div>
+
+        <!-- Panel 3: Store -->
+        <div class="upgrades-panel">
+            <h3 id="shop-title">Boutique</h3>
+            
+            <div class="shop-section">
+                <h4>✨ Améliorations</h4>
+                <div class="upgrade-item" id="upgrade-click-mult">
+                    <div class="upgrade-info">
+                        <h4>Crème pour les mains</h4>
+                        <p>Double les cookies par clic.</p>
+                        <p>Coût : <span id="click-mult-cost">500</span> 🍪</p>
+                    </div>
+                    <button id="buy-click-mult" class="btn-buy">Acheter</button>
+                </div>
+
+                <div class="upgrade-item" id="upgrade-auto-mult">
+                    <div class="upgrade-info">
+                        <h4>Rouleau à pâtisserie</h4>
+                        <p>Double la production des curseurs.</p>
+                        <p>Coût : <span id="auto-mult-cost">1000</span> 🍪</p>
+                    </div>
+                    <button id="buy-auto-mult" class="btn-buy">Acheter</button>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h4>🏗️ Constructions</h4>
+                <div class="upgrade-item" id="upgrade-click">
+                    <div class="upgrade-info">
+                        <h4>Mitaines de cuisine (Lvl <span id="click-level">1</span>)</h4>
+                        <p>Augmente la force de chaque clic.</p>
+                        <p>Coût : <span id="click-cost">15</span> 🍪</p>
+                    </div>
+                    <button id="buy-click" class="btn-buy">Acheter</button>
+                </div>
+
+                <div class="upgrade-item" id="upgrade-auto">
+                    <div class="upgrade-info">
+                        <h4>Curseur (<span id="auto-count">0</span>)</h4>
+                        <p>Clique automatiquement pour vous.</p>
+                        <p>Coût : <span id="auto-cost">50</span> 🍪</p>
+                    </div>
+                    <button id="buy-auto" class="btn-buy">Acheter</button>
+                </div>
+
+                <div class="upgrade-item" id="upgrade-speed">
+                    <div class="upgrade-info">
+                        <h4>Réveil Matin (Lvl <span id="speed-level">1</span>)</h4>
+                        <p>Motive vos curseurs à cliquer plus vite.</p>
+                        <p>Coût : <span id="speed-cost">500</span> 🍪</p>
+                    </div>
+                    <button id="buy-speed" class="btn-buy">Acheter</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <script src="/js/game.js" type="module"></script>
+</body>
+</html>
