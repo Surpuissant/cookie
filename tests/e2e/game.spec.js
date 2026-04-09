@@ -22,15 +22,15 @@ test.describe('Cookie Clicker E2E', () => {
         await cookie.click();
         await expect(count).toHaveText('1');
         
-        // Buy upgrade if possible (need 10)
-        for(let i=0; i<9; i++) await cookie.click();
-        await expect(count).toHaveText('10');
+        // Buy upgrade if possible (need 15)
+        for(let i=0; i<14; i++) await cookie.click();
+        await expect(count).toHaveText('15');
         
         const buyClick = page.locator('#buy-click');
         await expect(buyClick).not.toBeDisabled();
         await buyClick.click();
         
         await expect(page.locator('#click-level')).toHaveText('2');
-        await expect(count).toHaveText('0'); // cost 10
+        await expect(count).toHaveText('0'); // cost 15
     });
 });
