@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      SESSION_SECRET: ci-test-secret
 
     steps:
     - uses: actions/checkout@v4

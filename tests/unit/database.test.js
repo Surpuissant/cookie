@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import * as dbManager from '../../src/server/db-manager.js';
 import db from '../../src/server/database.js';
 
@@ -45,8 +45,12 @@ describe('Database Manager', () => {
         const newState = {
             cookies: 1234,
             click_value: 5,
-            auto_clickers: 10,
-            vitesse_level: 2
+            cursor_count: 10,
+            grandma_count: 3,
+            farm_count: 2,
+            mine_count: 1,
+            click_multiplier: 2,
+            production_multiplier: 2
         };
 
         dbManager.saveGameState(userId, newState);
@@ -54,7 +58,11 @@ describe('Database Manager', () => {
 
         expect(loaded.cookies).toBe(1234);
         expect(loaded.click_value).toBe(5);
-        expect(loaded.auto_clickers).toBe(10);
-        expect(loaded.vitesse_level).toBe(2);
+        expect(loaded.cursor_count).toBe(10);
+        expect(loaded.grandma_count).toBe(3);
+        expect(loaded.farm_count).toBe(2);
+        expect(loaded.mine_count).toBe(1);
+        expect(loaded.click_multiplier).toBe(2);
+        expect(loaded.production_multiplier).toBe(2);
     });
 });

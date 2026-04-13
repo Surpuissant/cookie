@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/server/index.js",
-    "dev": "nodemon src/server/index.js",
+    "dev": "nodemon --watch src/server --watch views --watch public --ext js,ejs,css src/server/index.js",
+    "dev:fast": "node --watch src/server/index.js",
     "test": "vitest run --exclude tests/e2e",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage --exclude tests/e2e",

@@ -3,7 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbPath = path.resolve(__dirname, '../../data/cookie-clicker.db');
+const isTestEnv = process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+const dbFileName = isTestEnv ? 'cookie-clicker.test.db' : 'cookie-clicker.db';
+const dbPath = path.resolve(__dirname, `../../data/${dbFileName}`);
 
 // Ensure data directory exists
 import fs from 'fs';
@@ -26,12 +28,28 @@ db.exec(`
     user_id INTEGER PRIMARY KEY,
     cookies REAL DEFAULT 0,
     click_value INTEGER DEFAULT 1,
-    auto_clickers INTEGER DEFAULT 0,
-    vitesse_level INTEGER DEFAULT 1,
+    cursor_count INTEGER DEFAULT 0,
+    grandma_count INTEGER DEFAULT 0,
+    farm_count INTEGER DEFAULT 0,
+    mine_count INTEGER DEFAULT 0,
     click_multiplier REAL DEFAULT 1.0,
-    auto_multiplier REAL DEFAULT 1.0,
+    production_multiplier REAL DEFAULT 1.0,
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
 `);
+
+const ensureColumn = (columnName, sqlDefinition) => {
+  const columns = db.prepare('PRAGMA table_info(game_state)').all();
+  const exists = columns.some((col) => col.name === columnName);
+  if (!exists) {
+    db.exec(`ALTER TABLE game_state ADD COLUMN ${columnName} ${sqlDefinition}`);
+  }
+};
+
+ensureColumn('cursor_count', 'INTEGER DEFAULT 0');
+ensureColumn('grandma_count', 'INTEGER DEFAULT 0');
+ensureColumn('farm_count', 'INTEGER DEFAULT 0');
+ensureColumn('mine_count', 'INTEGER DEFAULT 0');
+ensureColumn('production_multiplier', 'REAL DEFAULT 1.0');
 
 export default db;

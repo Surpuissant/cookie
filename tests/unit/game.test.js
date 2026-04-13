@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { 
     calculateClickCost, 
     calculateAutoClickerCost, 
-    calculateSpeedCost, 
+    calculateBuildingCost, 
     calculateCPS,
     canAfford
 } from '../../public/js/shared/game-logic.js';
@@ -29,23 +29,40 @@ describe('Game Logic', () => {
         });
     });
 
-    describe('Speed Costs', () => {
-        it('should return 500 for level 1', () => {
-            expect(calculateSpeedCost(1)).toBe(500);
+    describe('Building Costs', () => {
+        it('should keep base cost for first building', () => {
+            expect(calculateBuildingCost(100, 0)).toBe(100);
         });
-        it('should double for each level', () => {
-            expect(calculateSpeedCost(2)).toBe(1250);
-            expect(calculateSpeedCost(3)).toBe(Math.floor(500 * Math.pow(2.5, 2)));
+        it('should scale with 1.15 ratio', () => {
+            expect(calculateBuildingCost(100, 1)).toBe(114);
+            expect(calculateBuildingCost(100, 2)).toBe(132);
         });
     });
 
     describe('CPS Calculation', () => {
-        it('should return 0 if no auto-clickers', () => {
-            expect(calculateCPS(0, 10)).toBe(0);
+        it('should return 0 if no buildings', () => {
+            expect(calculateCPS({
+                cursor_count: 0,
+                grandma_count: 0,
+                farm_count: 0,
+                mine_count: 0
+            })).toBe(0);
         });
-        it('should return auto-clickers * speed * 0.2', () => {
-            expect(calculateCPS(10, 2)).toBe(4);
-            expect(calculateCPS(5, 5)).toBe(5);
+        it('should sum all building productions', () => {
+            expect(calculateCPS({
+                cursor_count: 10,
+                grandma_count: 1,
+                farm_count: 0,
+                mine_count: 0
+            })).toBe(6);
+        });
+        it('should include production multiplier', () => {
+            expect(calculateCPS({
+                cursor_count: 2,
+                grandma_count: 1,
+                farm_count: 1,
+                mine_count: 0
+            }, 2)).toBe(21.6);
         });
     });
 

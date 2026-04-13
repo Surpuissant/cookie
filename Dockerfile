@@ -46,6 +46,7 @@ USER node
 
 # Set environment to production and expose the port
 ENV NODE_ENV=production
+ENV SESSION_SECRET=change-me-in-runtime
 EXPOSE 3000
 
 # Start the application

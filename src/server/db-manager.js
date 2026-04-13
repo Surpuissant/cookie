@@ -23,15 +23,17 @@ export const saveGameState = (userId, state) => {
     const { 
         cookies, 
         click_value, 
-        auto_clickers, 
-        vitesse_level, 
+        cursor_count = 0,
+        grandma_count = 0,
+        farm_count = 0,
+        mine_count = 0,
         click_multiplier = 1.0, 
-        auto_multiplier = 1.0 
+        production_multiplier = 1.0
     } = state;
     return db.prepare(`
         UPDATE game_state 
-        SET cookies = ?, click_value = ?, auto_clickers = ?, vitesse_level = ?, click_multiplier = ?, auto_multiplier = ? 
+        SET cookies = ?, click_value = ?, cursor_count = ?, grandma_count = ?, farm_count = ?, mine_count = ?, click_multiplier = ?, production_multiplier = ? 
         WHERE user_id = ?
-    `).run(cookies, click_value, auto_clickers, vitesse_level, click_multiplier, auto_multiplier, userId);
+    `).run(cookies, click_value, cursor_count, grandma_count, farm_count, mine_count, click_multiplier, production_multiplier, userId);
 };
 
