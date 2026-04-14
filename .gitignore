@@ -142,3 +142,16 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Database
+data/*.db
+data/*.db-journal
+
+# Test reports
+playwright-report/
+test-results/
+
+# Editor/Temp files
+*~
+*.swp
+.DS_Store
