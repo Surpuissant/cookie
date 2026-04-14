@@ -26,9 +26,9 @@ test.describe('Cookie Clicker E2E', () => {
         for(let i=0; i<14; i++) await cookie.click();
         await expect(count).toHaveText('15');
         
-        const buyClick = page.locator('#buy-click');
-        await expect(buyClick).not.toBeDisabled();
-        await buyClick.click();
+        const upgradeClickCard = page.locator('#upgrade-click');
+        await expect(upgradeClickCard).toBeVisible();
+        await upgradeClickCard.click();
         
         await expect(page.locator('#click-level')).toHaveText('2');
         await expect(count).toHaveText('0'); // cost 15

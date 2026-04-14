@@ -497,7 +497,9 @@ body {
     font-size: 2.5rem;
     flex-shrink: 0;
     transition: all 0.2s ease;
+    pointer-events: none; /* Let clicks pass through to the parent card */
 }
+
 
 .building-card:hover .building-icon-container {
     background: rgba(255, 255, 255, 0.1);
@@ -634,7 +636,9 @@ body {
 .upgrade-icon {
     font-size: 2.2rem;
     line-height: 1;
+    pointer-events: none; /* Let clicks pass through to the parent card */
 }
+
 
 .upgrade-hover-tooltip {
     position: absolute;
