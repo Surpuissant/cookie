@@ -1,0 +1,23 @@
+<div class="upgrade-item building-card" id="card-<%= id %>">
+    <div class="building-icon-container" id="icon-<%= id %>">
+        <span class="emoji"><%= emoji %></span>
+    </div>
+
+    <div class="upgrade-info" id="building-<%= id %>">
+        <h4 class="building-name-display"><%= name %></h4>
+        <p class="cost">Coût : <span class="cost-value"><%= cost %></span> 🍪</p>
+    </div>
+
+    <button id="buy-<%= id %>" class="btn-buy sr-only">Acheter</button>
+
+    <div class="building-tooltip" id="tooltip-<%= id %>">
+        <h5 class="tooltip-name"><%= name %></h5>
+        <p class="quote">"<%= quote %>"</p>
+        <ul class="stats">
+            <li>✨ Produit <strong class="tooltip-cps"><%= cps %></strong> cookies / sec</li>
+            <li>🏗️ Vous en possédez <strong class="tooltip-owned">0</strong></li>
+            <li>📈 Production totale : <strong class="tooltip-total-cps">0</strong> cps</li>
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,49 @@
+<!-- Panel 3: Store -->
+<div class="upgrades-panel">
+    <h3 id="shop-title">Boutique</h3>
+    
+    <div class="shop-section">
+        <h4>✨ Améliorations</h4>
+        <div class="upgrade-icons-grid">
+            <%- include('upgrade-card', {
+                id: 'upgrade-click',
+                buyId: 'buy-click',
+                name: 'Mitaines de cuisine',
+                icon: '🖐️',
+                description: 'Augmente la force de chaque clic.',
+                costId: 'click-cost',
+                initialCost: 15,
+                levelId: 'click-level'
+            }) %>
+
+            <%- include('upgrade-card', {
+                id: 'upgrade-click-mult',
+                buyId: 'buy-click-mult',
+                name: 'Crème pour les mains',
+                icon: '🧤',
+                description: 'Double les cookies gagnés par clic.',
+                costId: 'click-mult-cost',
+                initialCost: 500
+            }) %>
+
+            <%- include('upgrade-card', {
+                id: 'upgrade-prod-mult',
+                buyId: 'buy-prod-mult',
+                name: 'Rouleau à pâtisserie',
+                icon: '🪵',
+                description: 'Double la production de toutes les constructions.',
+                costId: 'prod-mult-cost',
+                initialCost: 1000
+            }) %>
+        </div>
+    </div>
+
+    <div class="shop-section">
+        <h4>🏗️ Constructions</h4>
+        <%- include('building-card', { id: 'cursor_count', emoji: '🖱️', name: 'Curseur', quote: 'Clique automatiquement toutes les 10 secondes.', cps: '0.4', cost: '15' }) %>
+        <%- include('building-card', { id: 'grandma_count', emoji: '👵', name: 'Grand-mère', quote: 'Une gentille grand-mère pour cuire plus de cookies', cps: '2', cost: '100' }) %>
+        <%- include('building-card', { id: 'farm_count', emoji: '🌾', name: 'Ferme', quote: 'Fait pousser des plants de cookies à partir de graines de cookies.', cps: '8', cost: '1100' }) %>
+        <%- include('building-card', { id: 'mine_count', emoji: '⛏️', name: 'Mine', quote: 'Mine de la pâte à cookies et des pépites de chocolat.', cps: '47', cost: '12000' }) %>
+
+    </div>
+</div>

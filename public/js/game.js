@@ -22,35 +22,45 @@ const BUILDINGS = [
         key: 'cursor_count',
         emoji: '🖱️',
         label: 'Curseur',
-        description: '"Clique automatiquement toutes les 10 secondes."',
+        description: 'Clique automatiquement toutes les 10 secondes.',
         baseCps: 0.4,
-        baseCost: 15
+        baseCost: 15,
+        revealThreshold: 0,
+        unlockThreshold: 0
     },
     {
         key: 'grandma_count',
         emoji: '👵',
         label: 'Grand-mère',
-        description: '"Une gentille grand-mère pour cuire plus de cookies"',
+        description: 'Une gentille grand-mère pour cuire plus de cookies',
         baseCps: 2,
-        baseCost: 100
+        baseCost: 100,
+        revealThreshold: 40,
+        unlockThreshold: 100
     },
     {
         key: 'farm_count',
         emoji: '🌾',
         label: 'Ferme',
-        description: '"Fait pousser des plants de cookies à partir de graines de cookies."',
+        description: 'Fait pousser des plants de cookies à partir de graines de cookies.',
         baseCps: 8,
-        baseCost: 1100
+        baseCost: 1100,
+        revealThreshold: 500,
+        unlockThreshold: 1100
     },
     {
         key: 'mine_count',
         emoji: '⛏️',
         label: 'Mine',
-        description: '"Mine de la pâte à cookies et des pépites de chocolat."',
+        description: 'Mine de la pâte à cookies et des pépites de chocolat.',
         baseCps: 47,
-        baseCost: 12000
+        baseCost: 12000,
+        revealThreshold: 6000,
+        unlockThreshold: 12000
     }
 ];
+
+
 
 const UI = {
     cookieCount: document.getElementById('cookie-count'),
@@ -78,9 +88,19 @@ const UI = {
     })),
     buildingCards: BUILDINGS.map((building) => ({
         ...building,
+        card: document.getElementById(`card-${building.key}`),
         info: document.getElementById(`building-${building.key}`),
-        buyButton: document.getElementById(`buy-${building.key}`)
+        buyButton: document.getElementById(`buy-${building.key}`),
+        nameDisplay: document.querySelector(`#card-${building.key} .building-name-display`),
+        costValue: document.querySelector(`#card-${building.key} .cost-value`),
+        tooltip: {
+            name: document.querySelector(`#card-${building.key} .tooltip-name`),
+            cps: document.querySelector(`#card-${building.key} .tooltip-cps`),
+            owned: document.querySelector(`#card-${building.key} .tooltip-owned`),
+            totalCps: document.querySelector(`#card-${building.key} .tooltip-total-cps`)
+        }
     }))
+
 };
 
 const animatePurchase = (element) => {
@@ -200,15 +220,29 @@ const updateUI = () => {
         const count = gameState[building.key];
         const cost = getBuildingCost(building);
         const totalProduction = count * building.baseCps * gameState.production_multiplier;
-        building.info.innerHTML = `
-            <h4>${building.emoji} ${building.label}</h4>
-            <p>${building.description}</p>
-            <p>• chaque ${building.label.toLowerCase()} produit ${building.baseCps} cookies par seconde</p>
-            <p>• vous en avez ${count} pour ${totalProduction.toFixed(1)} cps</p>
-            <p>Coût : ${formatCount(cost)} 🍪</p>
-        `;
+        
+        const isRevealed = gameState.cookies >= building.revealThreshold || count > 0;
+        const isUnlocked = gameState.cookies >= building.unlockThreshold || count > 0;
+
+        building.card.classList.toggle('hidden', !isRevealed);
+        building.card.classList.toggle('unknown', isRevealed && !isUnlocked);
+        
+        if (isRevealed && !isUnlocked) {
+            building.nameDisplay.innerText = '????';
+        } else if (isUnlocked) {
+            building.nameDisplay.innerText = building.label;
+            // Update tooltip only if unlocked
+            building.tooltip.name.innerText = building.label;
+            building.tooltip.cps.innerText = building.baseCps;
+            building.tooltip.owned.innerText = formatCount(count);
+            building.tooltip.totalCps.innerText = totalProduction.toFixed(1);
+        }
+
+        building.costValue.innerText = formatCount(cost);
         building.buyButton.disabled = !canAfford(gameState.cookies, cost);
+        building.card.classList.toggle('disabled-card', building.buyButton.disabled);
     });
+
 
     const totalBuildings = getTotalBuildings();
     const totalUpgrades = getTotalUpgrades();
@@ -301,17 +335,25 @@ UI.buyClick.addEventListener('click', () => {
 });
 
 UI.buildingCards.forEach((building) => {
-    building.buyButton.addEventListener('click', () => {
+    const buyAction = () => {
         const cost = getBuildingCost(building);
         if (canAfford(gameState.cookies, cost)) {
             gameState.cookies -= cost;
             gameState[building.key] += 1;
-            animatePurchase(building.buyButton.closest('.upgrade-item'));
+            animatePurchase(building.card);
             updateUI();
             saveGame();
         }
+    };
+
+    building.buyButton.addEventListener('click', buyAction);
+    building.card.addEventListener('click', (e) => {
+        if (!building.buyButton.disabled) {
+            buyAction();
+        }
     });
 });
+
 
 UI.buyClickMult.addEventListener('click', () => {
     const cost = getClickMultCost();
