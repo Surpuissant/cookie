@@ -1,0 +1,9 @@
+<div class="upgrade-item powerup-card icon-upgrade-card" id="<%= id %>" data-buy-target="<%= buyId %>" tabindex="0" role="button" aria-label="Acheter <%= name %>">
+    <div class="upgrade-icon"><%= icon %></div>
+    <div class="upgrade-hover-tooltip">
+        <h4><%= name %> <%- typeof levelId !== 'undefined' ? '(Lvl <span id="' + levelId + '">1</span>)' : '' %></h4>
+        <p><%= description %></p>
+        <p>Coût : <span id="<%= costId %>"><%= initialCost %></span> 🍪</p>
+    </div>
+    <button id="<%= buyId %>" class="btn-buy sr-only">Acheter</button>
+</div>

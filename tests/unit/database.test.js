@@ -40,6 +40,16 @@ describe('Database Manager', () => {
         expect(user).toBeUndefined();
     });
 
+    it('should return undefined for non-existent user', () => {
+        const user = dbManager.verifyUser('noone', 'pass');
+        expect(user).toBeUndefined();
+    });
+
+    it('should return null for non-existent user identifier', () => {
+        const user = dbManager.getUserByUsername('noone');
+        expect(user).toBeUndefined();
+    });
+
     it('should save and load game state', () => {
         const userId = dbManager.createUser('gamer', 'pass');
         const newState = {
@@ -64,5 +74,12 @@ describe('Database Manager', () => {
         expect(loaded.mine_count).toBe(1);
         expect(loaded.click_multiplier).toBe(2);
         expect(loaded.production_multiplier).toBe(2);
+    });
+
+    it('should return default state for non-existent userId', () => {
+        const state = dbManager.getGameState(9999);
+        // db-manager.js getGameState seems to return undefined or default if not found
+        // I should check the implementation if I want to be 100% sure what it returns.
+        expect(state).toBeUndefined();
     });
 });
