@@ -140,24 +140,34 @@ const getPrestigeLabel = (totalBuildings, totalUpgrades) => {
 const updateCursors = () => {
     UI.cursorContainer.innerHTML = '';
     const count = gameState.cursor_count;
-    const radius = 180;
-    
+    const wrapper = document.querySelector('.cookie-wrapper');
+    if (!wrapper || count <= 0) return;
+
+    const w = wrapper.clientWidth;
+    const h = wrapper.clientHeight;
+    const cx = w / 2;
+    const cy = h / 2;
+    const cursorHalf = 16; // orbiting-cursor is 32px
+    // Keep a margin from cookie edge: cookie is ~70% of wrapper
+    // radius ~ center - 45px (scales well between desktop/mobile)
+    const radius = Math.max(60, Math.min(w, h) / 2 - 45);
+
     for (let i = 0; i < count; i++) {
         const cursor = document.createElement('div');
         cursor.className = 'orbiting-cursor';
-        
+
         const angle = (i / count) * 2 * Math.PI;
-        const x = Math.cos(angle) * radius + 225 - 16; 
-        const y = Math.sin(angle) * radius + 225 - 16;
-        
+        const x = Math.cos(angle) * radius + cx - cursorHalf;
+        const y = Math.sin(angle) * radius + cy - cursorHalf;
+
         cursor.style.left = `${x}px`;
         cursor.style.top = `${y}px`;
-        
+
         const rotation = (angle * 180 / Math.PI) - 90;
         const rotStr = `rotate(${rotation}deg)`;
         cursor.style.transform = rotStr;
         cursor.style.setProperty('--orig-rot', rotStr);
-        
+
         UI.cursorContainer.appendChild(cursor);
     }
 };
@@ -279,8 +289,11 @@ const clickCookie = (e) => {
     UI.mainCookie.classList.add('clicked');
 
     const panelRect = document.querySelector('.cookie-panel').getBoundingClientRect();
-    const x = e ? (e.clientX - panelRect.left) : 225;
-    const y = e ? (e.clientY - panelRect.top) : 225;
+    const wrapper = document.querySelector('.cookie-wrapper');
+    const cx = wrapper ? (wrapper.clientWidth / 2) : 225;
+    const cy = wrapper ? (wrapper.clientHeight / 2) : 225;
+    const x = e ? (e.clientX - panelRect.left) : cx;
+    const y = e ? (e.clientY - panelRect.top) : cy;
     
     spawnFloatingNumber(x, y, val);
     spawnBackgroundCookie();
@@ -292,22 +305,56 @@ const clickCookie = (e) => {
 
 UI.mainCookie.addEventListener('click', clickCookie);
 
+const isMobileQuery = window.matchMedia('(max-width: 960px)');
+
+// Ferme tous les cards ouverts, puis ouvre le card cible (ou ferme si déjà ouvert)
+const toggleMobileCard = (card) => {
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.icon-upgrade-card.open, .building-card.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+};
+
+// Nettoyer les états .open quand on quitte le mode mobile
+isMobileQuery.addEventListener('change', (e) => {
+    if (!e.matches) {
+        document.querySelectorAll('.icon-upgrade-card.open, .building-card.open').forEach(el => el.classList.remove('open'));
+    }
+});
+
 UI.clickableUpgradeCards.forEach((card) => {
     const triggerBuy = () => {
-        const buyTarget = card.dataset.buyTarget;
-        const button = document.getElementById(buyTarget);
-        if (!button.disabled) {
-            button.click();
-        }
+        const button = document.getElementById(card.dataset.buyTarget);
+        if (!button.disabled) button.click();
     };
 
-    card.addEventListener('click', triggerBuy);
+    card.addEventListener('click', (e) => {
+        if (isMobileQuery.matches) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMobileCard(card);
+            return;
+        }
+        triggerBuy();
+    });
+
     card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             triggerBuy();
         }
     });
+
+    // Le bouton Acheter interne: stoppe la propagation (n'ouvre pas/ferme pas la carte)
+    // et laisse son propre listener d'achat s'exécuter normalement
+    const internalBuyBtn = document.getElementById(card.dataset.buyTarget);
+    if (internalBuyBtn) {
+        internalBuyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isMobileQuery.matches) {
+                card.classList.remove('open');
+            }
+        });
+    }
 });
 
 const saveGame = async () => {
@@ -346,12 +393,33 @@ UI.buildingCards.forEach((building) => {
         }
     };
 
-    building.buyButton.addEventListener('click', buyAction);
-    building.card.addEventListener('click', (e) => {
-        if (!building.buyButton.disabled) {
-            buyAction();
+    building.buyButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isMobileQuery.matches && !building.card.classList.contains('open')) {
+            toggleMobileCard(building.card);
+            return;
         }
+        buyAction();
+        if (isMobileQuery.matches) building.card.classList.remove('open');
     });
+
+    building.card.addEventListener('click', (e) => {
+        if (isMobileQuery.matches) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMobileCard(building.card);
+            return;
+        }
+        if (!building.buyButton.disabled) buyAction();
+    });
+});
+
+// Fermer toutes les fiches si on tape en dehors de n'importe quel card (mobile)
+document.addEventListener('click', (e) => {
+    if (!isMobileQuery.matches) return;
+    if (!e.target.closest('.icon-upgrade-card') && !e.target.closest('.building-card')) {
+        document.querySelectorAll('.icon-upgrade-card.open, .building-card.open').forEach(el => el.classList.remove('open'));
+    }
 });
 
 

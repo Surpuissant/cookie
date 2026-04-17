@@ -416,6 +416,8 @@ body {
     box-shadow: inset 5px 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 20;
+    /* Espace bas pour les infobulles proches du bas */
+    padding-bottom: 140px;
 }
 
 .upgrades-panel h3 {
@@ -533,6 +535,13 @@ body {
     transform: translateY(0);
 }
 
+/* Affichage sur état .open (tap mobile) */
+.building-card.open .building-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
 .building-tooltip h5 {
     color: #ffd700;
     font-size: 1.1rem;
@@ -616,7 +625,7 @@ body {
 .icon-upgrade-card {
     position: relative;
     width: 100%;
-    min-height: 84px;
+    min-height: 130px;
     padding: 0.2rem;
     margin-right: 0;
     display: flex;
@@ -674,6 +683,13 @@ body {
 .icon-upgrade-card:focus-visible .upgrade-hover-tooltip {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Affichage des tooltips au tap (classe .open gérée en JS mobile) */
+.icon-upgrade-card.open .upgrade-hover-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .upgrade-icons-grid .icon-upgrade-card:nth-child(3n) .upgrade-hover-tooltip {
@@ -1049,6 +1065,62 @@ body {
         width: 100%;
         max-height: none;
         overflow-y: visible;
-        padding: 1rem;
+        padding: 1rem 1rem 220px; /* plus d'espace bas pour les tooltips */
+    }
+
+    /* ─── Désactiver les effets :hover (sticky hover mobile) ─── */
+    .building-card:hover .building-tooltip {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
+    .building-card:hover .building-icon-container {
+        background: rgba(0, 0, 0, 0.3);
+        transform: none;
+    }
+    .icon-upgrade-card:hover .upgrade-hover-tooltip,
+    .icon-upgrade-card:focus-visible .upgrade-hover-tooltip {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
+    .upgrade-item:hover {
+        background: rgba(0, 0, 0, 0.6);
+        border-color: #444;
+        transform: none;
+    }
+
+    /* ─── Curseur neutre (pas d'achat au tap, uniquement via bouton) ─── */
+    .building-card,
+    .icon-upgrade-card {
+        cursor: default;
+    }
+
+    /* ─── Bouton Acheter visible uniquement quand la fiche est ouverte ─── */
+    .building-card.open .btn-buy.sr-only,
+    .icon-upgrade-card.open .btn-buy.sr-only {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 12px !important;
+        margin: 0.5rem 0 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        white-space: normal !important;
+        border-radius: 8px !important;
+        display: block !important;
+    }
+
+    /* ─── État .open : contrôle exclusif de la visibilité des tooltips ─── */
+    .building-card.open .building-tooltip {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+    }
+    .icon-upgrade-card.open .upgrade-hover-tooltip {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
     }
 }
+
