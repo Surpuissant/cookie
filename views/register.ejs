@@ -1,6 +1,6 @@
 <%- include('partials/head', { title: 'Cookie Clicker - Inscription' }) %>
 
-<%- include('partials/auth/auth-container-start') %>
+<%- include('partials/auth/auth-container-start', { containerClass: 'register-page' }) %>
     <h2>Inscription</h2>
     <% if (locals.error) { %>
         <p class="error"><%= error %></p>

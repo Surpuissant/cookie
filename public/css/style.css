@@ -134,6 +134,39 @@ body {
     text-decoration: underline;
 }
 
+/* ─── Page Inscription : accent vert ─── */
+.auth-container.register-page {
+    border-color: #4ade80;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(74, 222, 128, 0.1);
+}
+
+.auth-container.register-page h2 {
+    color: #4ade80;
+}
+
+.auth-container.register-page input:focus {
+    border-color: #4ade80;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+.auth-container.register-page .btn-primary {
+    background: linear-gradient(180deg, #4ade80 0%, #166534 100%);
+    box-shadow: 0 4px 0 #14532d;
+}
+
+.auth-container.register-page .btn-primary:hover {
+    background: linear-gradient(180deg, #86efac 0%, #16a34a 100%);
+    box-shadow: 0 6px 0 #14532d;
+}
+
+.auth-container.register-page .btn-primary:active {
+    box-shadow: 0 2px 0 #14532d;
+}
+
+.auth-container.register-page a {
+    color: #4ade80;
+}
+
 .error {
     background: rgba(255, 77, 77, 0.1);
     border: 1px solid #ff4d4d;
@@ -321,6 +354,7 @@ body {
     user-select: none;
     -webkit-user-drag: none;
     filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+    touch-action: manipulation;
 }
 
 @keyframes cookieClick {
@@ -1007,6 +1041,16 @@ body {
         overflow-x: hidden;
     }
 
+    /* ─── Auth pages : marges latérales sur mobile ─── */
+    .auth-page {
+        padding: 1.5rem 1rem;
+        align-items: flex-start;
+    }
+
+    .auth-container {
+        padding: 2rem 1.5rem;
+    }
+
     .top-bar {
         padding: 0 1rem;
     }
@@ -1096,19 +1140,33 @@ body {
         cursor: default;
     }
 
-    /* ─── Bouton Acheter visible uniquement quand la fiche est ouverte ─── */
-    .building-card.open .btn-buy.sr-only,
-    .icon-upgrade-card.open .btn-buy.sr-only {
+    /* ─── Bouton Acheter : replié dans le flux (évite le flash de débordement) ─── */
+    .building-card .btn-buy.sr-only,
+    .icon-upgrade-card .btn-buy.sr-only {
         position: static !important;
         width: 100% !important;
+        max-height: 0 !important;
         height: auto !important;
-        padding: 12px !important;
-        margin: 0.5rem 0 0 !important;
-        overflow: visible !important;
-        clip: auto !important;
+        padding: 0 12px !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        clip: unset !important;
         white-space: normal !important;
         border-radius: 8px !important;
         display: block !important;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+    }
+
+    /* ─── État ouvert : déploiement progressif ─── */
+    .building-card.open .btn-buy.sr-only,
+    .icon-upgrade-card.open .btn-buy.sr-only {
+        max-height: 60px !important;
+        padding: 12px !important;
+        margin: 0.5rem 0 0 !important;
+        opacity: 1 !important;
+        pointer-events: auto;
     }
 
     /* ─── État .open : contrôle exclusif de la visibilité des tooltips ─── */

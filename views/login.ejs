@@ -1,6 +1,6 @@
 <%- include('partials/head', { title: 'Cookie Clicker - Login' }) %>
 
-<%- include('partials/auth/auth-container-start') %>
+<%- include('partials/auth/auth-container-start', { containerClass: 'login-page' }) %>
     <h2>Connexion</h2>
     <% if (locals.error) { %>
         <p class="error"><%= error %></p>
