@@ -6,6 +6,7 @@ import {
     canAfford
 } from './shared/game-logic.js';
 import { BUILDINGS } from './shared/buildings.js';
+import { createSoundManager } from './shared/sound-manager.js';
 
 let gameState = {
     cookies: 0,
@@ -100,6 +101,20 @@ const PRESTIGE_WEIGHTS = {
 };
 
 const PRESTIGE_GOD_THRESHOLD = 240;
+const soundManager = createSoundManager();
+soundManager.registerSound('god-status', '/mp3/angelical.mp3');
+soundManager.registerSound('purchase', '/mp3/applepay.mp3');
+soundManager.registerSound('prestige-rank-up', '/mp3/ascend.mp3');
+let previousPrestigeRank = 0;
+
+const getPrestigeRank = (score) => {
+    if (score >= PRESTIGE_GOD_THRESHOLD) return 5;
+    if (score >= 180) return 4;
+    if (score >= 110) return 3;
+    if (score >= 45) return 2;
+    if (score >= 15) return 1;
+    return 0;
+};
 
 const getPrestigeScore = (totalUpgrades) => {
     const buildingScore = BUILDINGS.reduce((sum, building) => {
@@ -113,11 +128,12 @@ const getPrestigeScore = (totalUpgrades) => {
 
 const getPrestigeLabel = (totalBuildings, totalUpgrades) => {
     const score = getPrestigeScore(totalUpgrades);
-    if (score >= PRESTIGE_GOD_THRESHOLD) return '🌟 Dieu du Cookie';
-    if (score >= 180) return '🍪 Légende Sucrée';
-    if (score >= 110) return '👑 Baron du Cookie';
-    if (score >= 45) return '⚙️ Artisan';
-    if (score >= 15) return '🌱 Apprenti';
+    const rank = getPrestigeRank(score);
+    if (rank === 5) return '🌟 Dieu du Cookie';
+    if (rank === 4) return '🍪 Légende Sucrée';
+    if (rank === 3) return '👑 Baron du Cookie';
+    if (rank === 2) return '⚙️ Artisan';
+    if (rank === 1) return '🌱 Apprenti';
     return '🥄 Débutant';
 };
 
@@ -248,7 +264,13 @@ const updateUI = () => {
 
     // Swap main cookie image to golden when prestige score reaches 200
     const prestigeScore = getPrestigeScore(totalUpgrades);
-    const desiredCookieSrc = prestigeScore >= PRESTIGE_GOD_THRESHOLD
+    const prestigeRank = getPrestigeRank(prestigeScore);
+    const hasGodStatus = prestigeScore >= PRESTIGE_GOD_THRESHOLD;
+    const rankUpWithoutGod = prestigeRank > previousPrestigeRank && prestigeRank < 5;
+    soundManager.playEventTransition('prestige-rank-up', rankUpWithoutGod, { soundId: 'prestige-rank-up' });
+    soundManager.playEventTransition('god-status', hasGodStatus, { soundId: 'god-status' });
+
+    const desiredCookieSrc = hasGodStatus
         ? '/images/goldenCookie.png' 
         : '/images/cookie.png';
     if (UI.mainCookie.getAttribute('src') !== desiredCookieSrc) {
@@ -268,6 +290,8 @@ const updateUI = () => {
         const button = document.getElementById(buyTarget);
         card.classList.toggle('disabled-card', button.disabled);
     });
+
+    previousPrestigeRank = prestigeRank;
     
     updateCursors();
 };
@@ -369,6 +393,7 @@ UI.buyClick.addEventListener('click', () => {
         gameState.cookies -= cost;
         gameState.click_value += 1;
         animatePurchase(document.getElementById('upgrade-click'));
+        soundManager.play('purchase');
         updateUI();
         saveGame();
     }
@@ -381,6 +406,7 @@ UI.buildingCards.forEach((building) => {
             gameState.cookies -= cost;
             gameState[building.key] += 1;
             animatePurchase(building.card);
+            soundManager.play('purchase');
             updateUI();
             saveGame();
         }
@@ -422,6 +448,7 @@ UI.buyClickMult.addEventListener('click', () => {
         gameState.cookies -= cost;
         gameState.click_multiplier *= 2;
         animatePurchase(document.getElementById('upgrade-click-mult'));
+        soundManager.play('purchase');
         updateUI();
         saveGame();
     }
@@ -433,6 +460,7 @@ UI.buyProdMult.addEventListener('click', () => {
         gameState.cookies -= cost;
         gameState.production_multiplier *= 2;
         animatePurchase(document.getElementById('upgrade-prod-mult'));
+        soundManager.play('purchase');
         updateUI();
         saveGame();
     }
@@ -477,6 +505,8 @@ fetch('/api/game-state')
                 ...data
             };
         }
+        soundManager.setSuppressEventSounds(true);
         updateUI();
+        soundManager.setSuppressEventSounds(false);
     });
 
