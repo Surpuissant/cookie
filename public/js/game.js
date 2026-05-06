@@ -39,10 +39,8 @@ const UI = {
     clickMultCost: document.getElementById('click-mult-cost'),
     prodMultCost: document.getElementById('prod-mult-cost'),
     cursorContainer: document.getElementById('cursor-container'),
-    totalBuildings: document.getElementById('total-buildings'),
-    totalUpgrades: document.getElementById('total-upgrades'),
-    buildingsFill: document.getElementById('buildings-fill'),
-    upgradesFill: document.getElementById('upgrades-fill'),
+    ascensionFill: document.getElementById('ascension-fill'),
+    ascensionPercent: document.getElementById('ascension-percent'),
     prestigeBadge: document.getElementById('prestige-badge'),
     buildingVisualCards: BUILDINGS.map((building) => ({
         key: building.key,
@@ -256,14 +254,16 @@ const updateUI = () => {
 
     const totalBuildings = getTotalBuildings();
     const totalUpgrades = getTotalUpgrades();
-    UI.totalBuildings.innerText = formatCount(totalBuildings);
-    UI.totalUpgrades.innerText = formatCount(totalUpgrades);
-    UI.buildingsFill.style.width = `${Math.min(100, (totalBuildings / 200) * 100)}%`;
-    UI.upgradesFill.style.width = `${Math.min(100, (totalUpgrades / 80) * 100)}%`;
+    // Counters removed from UI; keep values for prestige only
     UI.prestigeBadge.innerText = getPrestigeLabel(totalBuildings, totalUpgrades);
 
-    // Swap main cookie image to golden when prestige score reaches 200
+    // Ascension progress toward God threshold (single bar)
     const prestigeScore = getPrestigeScore(totalUpgrades);
+    const ascensionProgress = Math.min(100, (prestigeScore / PRESTIGE_GOD_THRESHOLD) * 100);
+    if (UI.ascensionFill) UI.ascensionFill.style.width = `${ascensionProgress}%`;
+    if (UI.ascensionPercent) UI.ascensionPercent.innerText = `${Math.floor(ascensionProgress)}%`;
+
+    // Swap main cookie image to golden when prestige score reaches threshold
     const prestigeRank = getPrestigeRank(prestigeScore);
     const hasGodStatus = prestigeScore >= PRESTIGE_GOD_THRESHOLD;
     const rankUpWithoutGod = prestigeRank > previousPrestigeRank && prestigeRank < 5;
