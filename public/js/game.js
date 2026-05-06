@@ -5,6 +5,7 @@ import {
     calculateClickValue,
     canAfford
 } from './shared/game-logic.js';
+import { BUILDINGS } from './shared/buildings.js';
 
 let gameState = {
     cookies: 0,
@@ -13,52 +14,12 @@ let gameState = {
     grandma_count: 0,
     farm_count: 0,
     mine_count: 0,
+    factory_count: 0,
+    bank_count: 0,
+    temple_count: 0,
     click_multiplier: 1.0,
     production_multiplier: 1.0
 };
-
-const BUILDINGS = [
-    {
-        key: 'cursor_count',
-        emoji: '🖱️',
-        label: 'Curseur',
-        description: 'Clique automatiquement toutes les 10 secondes.',
-        baseCps: 0.4,
-        baseCost: 15,
-        revealThreshold: 0,
-        unlockThreshold: 0
-    },
-    {
-        key: 'grandma_count',
-        emoji: '👵',
-        label: 'Grand-mère',
-        description: 'Une gentille grand-mère pour cuire plus de cookies',
-        baseCps: 2,
-        baseCost: 100,
-        revealThreshold: 40,
-        unlockThreshold: 100
-    },
-    {
-        key: 'farm_count',
-        emoji: '🌾',
-        label: 'Ferme',
-        description: 'Fait pousser des plants de cookies à partir de graines de cookies.',
-        baseCps: 8,
-        baseCost: 1100,
-        revealThreshold: 500,
-        unlockThreshold: 1100
-    },
-    {
-        key: 'mine_count',
-        emoji: '⛏️',
-        label: 'Mine',
-        description: 'Mine de la pâte à cookies et des pépites de chocolat.',
-        baseCps: 47,
-        baseCost: 12000,
-        revealThreshold: 6000,
-        unlockThreshold: 12000
-    }
-];
 
 
 
@@ -130,6 +91,7 @@ const getTotalUpgrades = () => {
 
 const getPrestigeLabel = (totalBuildings, totalUpgrades) => {
     const score = totalBuildings + totalUpgrades * 2;
+    if (score >= 200) return '🌟 Dieu du Cookie';
     if (score >= 150) return '🍪 Légende Sucrée';
     if (score >= 80) return '👑 Baron du Cookie';
     if (score >= 30) return '⚙️ Artisan';
@@ -261,6 +223,15 @@ const updateUI = () => {
     UI.buildingsFill.style.width = `${Math.min(100, (totalBuildings / 200) * 100)}%`;
     UI.upgradesFill.style.width = `${Math.min(100, (totalUpgrades / 80) * 100)}%`;
     UI.prestigeBadge.innerText = getPrestigeLabel(totalBuildings, totalUpgrades);
+
+    // Swap main cookie image to golden when prestige score reaches 200
+    const prestigeScore = totalBuildings + totalUpgrades * 2;
+    const desiredCookieSrc = prestigeScore >= 200 
+        ? '/images/goldenCookie.png' 
+        : '/images/cookie.png';
+    if (UI.mainCookie.getAttribute('src') !== desiredCookieSrc) {
+        UI.mainCookie.setAttribute('src', desiredCookieSrc);
+    }
     UI.buildingVisualCards.forEach((visual) => {
         const count = gameState[visual.key];
         visual.card.querySelector('.building-count').innerText = formatCount(count);

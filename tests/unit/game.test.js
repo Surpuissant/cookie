@@ -62,7 +62,10 @@ describe('Game Logic', () => {
                 cursor_count: 0,
                 grandma_count: 0,
                 farm_count: 0,
-                mine_count: 0
+                mine_count: 0,
+                factory_count: 0,
+                bank_count: 0,
+                temple_count: 0
             })).toBe(0);
         });
         it('should return 0 if buildings object is null or undefined', () => {
@@ -76,6 +79,17 @@ describe('Game Logic', () => {
                 farm_count: 0,
                 mine_count: 0
             })).toBe(6);
+        });
+        it('should include new buildings in production', () => {
+            expect(calculateCPS({
+                cursor_count: 0,
+                grandma_count: 0,
+                farm_count: 0,
+                mine_count: 0,
+                factory_count: 1,
+                bank_count: 1,
+                temple_count: 1
+            })).toBe(12720);
         });
         it('should include production multiplier', () => {
             expect(calculateCPS({

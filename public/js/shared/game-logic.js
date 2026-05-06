@@ -2,6 +2,8 @@
  * Game logic shared between client and server
  */
 
+import { BUILDINGS } from './buildings.js';
+
 export const calculateClickCost = (level) => {
     return Math.floor(15 * Math.pow(1.8, level - 1));
 };
@@ -21,11 +23,10 @@ export const calculateSpeedCost = (level) => {
 export const calculateCPS = (buildings, multiplier = 1) => {
     if (!buildings) return 0;
 
-    const baseTotal =
-        (buildings.cursor_count || 0) * 0.4 +
-        (buildings.grandma_count || 0) * 2 +
-        (buildings.farm_count || 0) * 8 +
-        (buildings.mine_count || 0) * 47;
+    const baseTotal = BUILDINGS.reduce((sum, building) => {
+        const count = buildings[building.key] || 0;
+        return sum + count * building.baseCps;
+    }, 0);
 
     return baseTotal * multiplier;
 };

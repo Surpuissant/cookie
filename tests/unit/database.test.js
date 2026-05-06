@@ -59,6 +59,9 @@ describe('Database Manager', () => {
             grandma_count: 3,
             farm_count: 2,
             mine_count: 1,
+            factory_count: 4,
+            bank_count: 1,
+            temple_count: 1,
             click_multiplier: 2,
             production_multiplier: 2
         };
@@ -72,6 +75,9 @@ describe('Database Manager', () => {
         expect(loaded.grandma_count).toBe(3);
         expect(loaded.farm_count).toBe(2);
         expect(loaded.mine_count).toBe(1);
+        expect(loaded.factory_count).toBe(4);
+        expect(loaded.bank_count).toBe(1);
+        expect(loaded.temple_count).toBe(1);
         expect(loaded.click_multiplier).toBe(2);
         expect(loaded.production_multiplier).toBe(2);
     });

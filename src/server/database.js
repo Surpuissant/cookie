@@ -32,6 +32,9 @@ db.exec(`
     grandma_count INTEGER DEFAULT 0,
     farm_count INTEGER DEFAULT 0,
     mine_count INTEGER DEFAULT 0,
+    factory_count INTEGER DEFAULT 0,
+    bank_count INTEGER DEFAULT 0,
+    temple_count INTEGER DEFAULT 0,
     click_multiplier REAL DEFAULT 1.0,
     production_multiplier REAL DEFAULT 1.0,
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -50,6 +53,9 @@ ensureColumn('cursor_count', 'INTEGER DEFAULT 0');
 ensureColumn('grandma_count', 'INTEGER DEFAULT 0');
 ensureColumn('farm_count', 'INTEGER DEFAULT 0');
 ensureColumn('mine_count', 'INTEGER DEFAULT 0');
+ensureColumn('factory_count', 'INTEGER DEFAULT 0');
+ensureColumn('bank_count', 'INTEGER DEFAULT 0');
+ensureColumn('temple_count', 'INTEGER DEFAULT 0');
 ensureColumn('production_multiplier', 'REAL DEFAULT 1.0');
 
 export default db;
