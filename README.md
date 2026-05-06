@@ -1,5 +1,13 @@
 # Cookie Clicker
 
+![CI](https://github.com/Surpuissant/cookie/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-95%25-green)
+![Tests](https://img.shields.io/badge/tests-vitest-green)
+![E2E](https://img.shields.io/badge/e2e-playwright-green)
+![Node.js](https://img.shields.io/badge/node.js-22.x-lightgrey)
+![Express](https://img.shields.io/badge/express-5.x-lightgrey)
+![License](https://img.shields.io/badge/license-ISC-blue)
+
 A simple and addictive incremental game.
 
 ## Installation
