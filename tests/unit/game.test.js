@@ -89,7 +89,7 @@ describe('Game Logic', () => {
                 factory_count: 1,
                 bank_count: 1,
                 temple_count: 1
-            })).toBe(12720);
+            })).toBe(15520);
         });
         it('should include production multiplier', () => {
             expect(calculateCPS({

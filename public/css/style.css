@@ -455,6 +455,7 @@ body {
     background: url('/images/panelBG.png') repeat;
     padding: 1.5rem;
     overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: inset 5px 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 20;
@@ -515,6 +516,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
 }
 
 .building-card h4 {
@@ -527,6 +529,12 @@ body {
     font-size: 0.9rem;
     color: #10b981;
     font-weight: bold;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.building-card .cost .cost-value {
+    overflow-wrap: anywhere;
 }
 
 .building-icon-container {

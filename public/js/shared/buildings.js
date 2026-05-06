@@ -45,28 +45,28 @@ export const BUILDINGS = [
         label: 'Usine',
         description: 'Produit des cookies en masse sur des lignes de production.',
         baseCps: 320,
-        baseCost: 90000,
-        revealThreshold: 30000,
-        unlockThreshold: 90000
+        baseCost: 120000,
+        revealThreshold: 40000,
+        unlockThreshold: 120000
     },
     {
         key: 'bank_count',
         emoji: '🏦',
         label: 'Banque',
         description: 'Investit dans les cookies pour des rendements sucrés.',
-        baseCps: 1900,
-        baseCost: 700000,
-        revealThreshold: 250000,
-        unlockThreshold: 700000
+        baseCps: 2200,
+        baseCost: 650000,
+        revealThreshold: 220000,
+        unlockThreshold: 650000
     },
     {
         key: 'temple_count',
         emoji: '⛩️',
         label: 'Temple',
         description: 'Invoque la bénédiction des cookies anciens.',
-        baseCps: 10500,
-        baseCost: 5000000,
-        revealThreshold: 2000000,
-        unlockThreshold: 5000000
+        baseCps: 13000,
+        baseCost: 3000000,
+        revealThreshold: 1200000,
+        unlockThreshold: 3000000
     }
 ];

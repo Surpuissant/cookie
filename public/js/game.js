@@ -89,13 +89,35 @@ const getTotalUpgrades = () => {
     return clickBoosts + clickMultBoosts + prodMultBoosts;
 };
 
+const PRESTIGE_WEIGHTS = {
+    cursor_count: 1,
+    grandma_count: 1,
+    farm_count: 1.2,
+    mine_count: 1.6,
+    factory_count: 2,
+    bank_count: 4,
+    temple_count: 20
+};
+
+const PRESTIGE_GOD_THRESHOLD = 240;
+
+const getPrestigeScore = (totalUpgrades) => {
+    const buildingScore = BUILDINGS.reduce((sum, building) => {
+        const count = gameState[building.key] || 0;
+        const weight = PRESTIGE_WEIGHTS[building.key] || 1;
+        return sum + count * weight;
+    }, 0);
+
+    return buildingScore + totalUpgrades * 2;
+};
+
 const getPrestigeLabel = (totalBuildings, totalUpgrades) => {
-    const score = totalBuildings + totalUpgrades * 2;
-    if (score >= 200) return '🌟 Dieu du Cookie';
-    if (score >= 150) return '🍪 Légende Sucrée';
-    if (score >= 80) return '👑 Baron du Cookie';
-    if (score >= 30) return '⚙️ Artisan';
-    if (score >= 10) return '🌱 Apprenti';
+    const score = getPrestigeScore(totalUpgrades);
+    if (score >= PRESTIGE_GOD_THRESHOLD) return '🌟 Dieu du Cookie';
+    if (score >= 180) return '🍪 Légende Sucrée';
+    if (score >= 110) return '👑 Baron du Cookie';
+    if (score >= 45) return '⚙️ Artisan';
+    if (score >= 15) return '🌱 Apprenti';
     return '🥄 Débutant';
 };
 
@@ -225,8 +247,8 @@ const updateUI = () => {
     UI.prestigeBadge.innerText = getPrestigeLabel(totalBuildings, totalUpgrades);
 
     // Swap main cookie image to golden when prestige score reaches 200
-    const prestigeScore = totalBuildings + totalUpgrades * 2;
-    const desiredCookieSrc = prestigeScore >= 200 
+    const prestigeScore = getPrestigeScore(totalUpgrades);
+    const desiredCookieSrc = prestigeScore >= PRESTIGE_GOD_THRESHOLD
         ? '/images/goldenCookie.png' 
         : '/images/cookie.png';
     if (UI.mainCookie.getAttribute('src') !== desiredCookieSrc) {
