@@ -30,6 +30,9 @@ body {
     min-height: 100vh;
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/bgBlue.jpg') repeat;
     background-attachment: fixed;
+    /* Safe area for iOS PWAs */
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
 }
 
 .auth-container {
@@ -186,14 +189,18 @@ body {
 
 /* Game Page Refinement */
 .top-bar {
-    height: 60px;
+    /* iOS PWA status bar handling */
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+    min-height: 60px;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
     border-bottom: 2px solid #ffd700;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     z-index: 100;
     position: relative;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -244,7 +251,8 @@ body {
     padding: 0;
     width: 100%;
     margin: 0;
-    height: calc(100vh - 60px);
+    /* Account for iOS safe-area when top-bar gains extra padding */
+    height: calc(100vh - 60px - env(safe-area-inset-top));
     position: relative;
 }
 
