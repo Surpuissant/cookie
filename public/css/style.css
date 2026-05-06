@@ -765,6 +765,25 @@ body {
     filter: grayscale(0.35);
 }
 
+.building-card.disabled-card {
+    cursor: not-allowed;
+}
+
+.building-card.disabled-card:hover {
+    transform: none;
+    border-color: #6a5428;
+    background: linear-gradient(180deg, rgba(39, 29, 10, 0.7) 0%, rgba(23, 17, 8, 0.7) 100%);
+}
+
+.building-card.disabled-card .building-icon-container {
+    opacity: 0.45;
+    filter: grayscale(0.35);
+}
+
+.building-card.disabled-card .cost {
+    color: #7f8c99;
+}
+
 .sr-only {
     position: absolute !important;
     width: 1px !important;
